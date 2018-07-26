@@ -36,15 +36,18 @@ dependencies {
    runtime "org.slf4j:log4j-over-slf4j:$slf4jVersion"
 }
 
-mainClassName = 'com.hectorlopezfernandez.dingleberries.MainVerticle'
+mainClassName = 'io.vertx.core.Launcher'
 
 shadowJar {
    classifier = 'fat'
+   manifest {
+      attributes 'Main-Verticle': 'com.hectorlopezfernandez.dingleberries.MainVerticle'
+   }
    mergeServiceFiles {
       include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
    }
 }
 
 run {
-   args = ['run', mainClassName, "--launcher-class=io.vertx.core.Launcher"]
+   args = ['run', 'com.hectorlopezfernandez.dingleberries.MainVerticle']
 }
