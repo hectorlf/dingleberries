@@ -1,17 +1,17 @@
 package com.hectorlopezfernandez.dingleberries;
 
+import com.hectorlopezfernandez.dingleberries.tracker.TrackerVerticle;
+
 import io.vertx.core.AbstractVerticle;
-import io.vertx.ext.web.Router;
+import io.vertx.core.DeploymentOptions;
 
 public class MainVerticle extends AbstractVerticle {
 
-    @Override
-    public void start() throws Exception {
-    	Router router = Router.router(vertx);
-    	router.route("/index.html").handler(routingContext -> {
-    		routingContext.response().putHeader("content-type", "text/html").end("Hello World!");
-    	});
-    	vertx.createHttpServer().requestHandler(router::accept).listen(8080);
-    }
+	@Override
+	public void start() throws Exception {
+		int trackers = config().getInteger("tracker.instances", 1);
+		DeploymentOptions trackerOptions = new DeploymentOptions().setInstances(trackers);
+		vertx.deployVerticle(TrackerVerticle.class, trackerOptions);
+	}
 
 }
