@@ -12,6 +12,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.StaticHandler;
 
 public final class TrackerVerticle extends AbstractVerticle {
 
@@ -29,6 +30,7 @@ public final class TrackerVerticle extends AbstractVerticle {
 		int port = config().getInteger(HTTP_PORT, HTTP_PORT_DEFAULT_VALUE);
 		Router router = Router.router(vertx);
 		router.get("/track").handler(new TrackerHandler(mongoClient));
+		router.get().handler(StaticHandler.create("tracker"));
 		vertx.createHttpServer().requestHandler(router::accept).listen(port);
 	}
 
